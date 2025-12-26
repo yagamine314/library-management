@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/17" 
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.library.controller.MainController"
+            prefHeight="800.0" prefWidth="1200.0">
+    
+    <center>
+        <TabPane fx:id="mainTabPane" tabClosingPolicy="UNAVAILABLE">
+            
+            <!-- Onglet Livres (à compléter par Étudiant A) -->
+            <Tab text="Livres">
+                <content>
+                    <Label text="Module Livres - À développer par Étudiant A" />
+                </content>
+            </Tab>
+            
+            <!-- Onglet Membres (à compléter par Étudiant B) -->
+            <Tab text="Membres">
+                <content>
+                    <Label text="Module Membres - À développer par Étudiant B" />
+                </content>
+            </Tab>
+            
+            <!-- Onglet Emprunts (à compléter par Étudiant C) -->
+            <Tab text="Emprunts">
+                <content>
+                    <Label text="Module Emprunts - À développer par Étudiant C" />
+                </content>
+            </Tab>
+            
+        </TabPane>
+    </center>
+    
+</BorderPane>

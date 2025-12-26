@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="com.library.util.DatabaseConnectionTest" time="0.408" tests="3" errors="0" skipped="0" failures="0">
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="com.library.util.DatabaseConnectionTest" time="0.391" tests="3" errors="0" skipped="0" failures="0">
   <properties>
     <property name="java.specification.version" value="25"/>
     <property name="sun.jnu.encoding" value="UTF-8"/>
@@ -13,7 +13,7 @@
     <property name="sun.java.launcher" value="SUN_STANDARD"/>
     <property name="user.country" value="US"/>
     <property name="sun.boot.library.path" value="/usr/lib/jvm/jdk-25.0.1-oracle-x64/lib"/>
-    <property name="sun.java.command" value="/home/yagamine/Documents/Project/library-management/target/surefire/surefirebooter-20251226022056330_3.jar /home/yagamine/Documents/Project/library-management/target/surefire 2025-12-26T02-20-54_843-jvmRun1 surefire-20251226022056330_1tmp surefire_0-20251226022056330_2tmp"/>
+    <property name="sun.java.command" value="/home/yagamine/Documents/Project/library-management/target/surefire/surefirebooter-20251226090642306_3.jar /home/yagamine/Documents/Project/library-management/target/surefire 2025-12-26T09-06-42_058-jvmRun1 surefire-20251226090642306_1tmp surefire_0-20251226090642306_2tmp"/>
     <property name="jdk.debug" value="release"/>
     <property name="surefire.test.class.path" value="/home/yagamine/Documents/Project/library-management/target/test-classes:/home/yagamine/Documents/Project/library-management/target/classes:/home/yagamine/.m2/repository/org/openjfx/javafx-controls/21.0.1/javafx-controls-21.0.1.jar:/home/yagamine/.m2/repository/org/openjfx/javafx-controls/21.0.1/javafx-controls-21.0.1-linux.jar:/home/yagamine/.m2/repository/org/openjfx/javafx-graphics/21.0.1/javafx-graphics-21.0.1.jar:/home/yagamine/.m2/repository/org/openjfx/javafx-graphics/21.0.1/javafx-graphics-21.0.1-linux.jar:/home/yagamine/.m2/repository/org/openjfx/javafx-base/21.0.1/javafx-base-21.0.1.jar:/home/yagamine/.m2/repository/org/openjfx/javafx-base/21.0.1/javafx-base-21.0.1-linux.jar:/home/yagamine/.m2/repository/org/openjfx/javafx-fxml/21.0.1/javafx-fxml-21.0.1.jar:/home/yagamine/.m2/repository/org/openjfx/javafx-fxml/21.0.1/javafx-fxml-21.0.1-linux.jar:/home/yagamine/.m2/repository/com/mysql/mysql-connector-j/8.3.0/mysql-connector-j-8.3.0.jar:/home/yagamine/.m2/repository/com/google/protobuf/protobuf-java/3.25.1/protobuf-java-3.25.1.jar:/home/yagamine/.m2/repository/org/junit/jupiter/junit-jupiter-api/5.10.1/junit-jupiter-api-5.10.1.jar:/home/yagamine/.m2/repository/org/opentest4j/opentest4j/1.3.0/opentest4j-1.3.0.jar:/home/yagamine/.m2/repository/org/junit/platform/junit-platform-commons/1.10.1/junit-platform-commons-1.10.1.jar:/home/yagamine/.m2/repository/org/apiguardian/apiguardian-api/1.1.2/apiguardian-api-1.1.2.jar:/home/yagamine/.m2/repository/org/junit/jupiter/junit-jupiter-engine/5.10.1/junit-jupiter-engine-5.10.1.jar:/home/yagamine/.m2/repository/org/junit/platform/junit-platform-engine/1.10.1/junit-platform-engine-1.10.1.jar:"/>
     <property name="sun.cpu.endian" value="little"/>
@@ -28,7 +28,7 @@
     <property name="line.separator" value="&#10;"/>
     <property name="java.specification.name" value="Java Platform API Specification"/>
     <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
-    <property name="surefire.real.class.path" value="/home/yagamine/Documents/Project/library-management/target/surefire/surefirebooter-20251226022056330_3.jar"/>
+    <property name="surefire.real.class.path" value="/home/yagamine/Documents/Project/library-management/target/surefire/surefirebooter-20251226090642306_3.jar"/>
     <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
     <property name="java.runtime.version" value="25.0.1+8-LTS-27"/>
     <property name="user.name" value="yagamine"/>
@@ -55,10 +55,10 @@
     <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
     <property name="java.class.version" value="69.0"/>
   </properties>
-  <testcase name="testSingletonInstance" classname="com.library.util.DatabaseConnectionTest" time="0.357">
+  <testcase name="testSingletonInstance" classname="com.library.util.DatabaseConnectionTest" time="0.334">
     <system-out><![CDATA[✅ Connexion DB établie!
 ]]></system-out>
   </testcase>
-  <testcase name="testIsConnected" classname="com.library.util.DatabaseConnectionTest" time="0.003"/>
-  <testcase name="testGetConnection" classname="com.library.util.DatabaseConnectionTest" time="0.005"/>
+  <testcase name="testIsConnected" classname="com.library.util.DatabaseConnectionTest" time="0.004"/>
+  <testcase name="testGetConnection" classname="com.library.util.DatabaseConnectionTest" time="0.004"/>
 </testsuite>

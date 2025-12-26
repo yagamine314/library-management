@@ -9,19 +9,19 @@ import java.util.List;
  */
 public interface DAO<T> {
     
-    /**
-     * Sauvegarde une nouvelle entité
-     */
+    
+    //Sauvegarde une nouvelle entité
+    
     void save(T entity) throws SQLException;
     
-    /**
-     * Recherche par identifiant
-     */
+    
+    //Recherche par identifiant
+     
     T findById(Object id) throws SQLException;
     
-    /**
-     * Récupère toutes les entités
-     */
+    
+    //Récupère toutes les entités
+     
     List<T> findAll() throws SQLException;
     
     /**

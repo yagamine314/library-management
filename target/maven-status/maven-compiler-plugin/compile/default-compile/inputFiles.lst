@@ -1,6 +1,10 @@
+/home/yagamine/Documents/Project/library-management/src/main/java/com/library/util/StringValidator.java
 /home/yagamine/Documents/Project/library-management/src/main/java/com/library/exception/ValidationException.java
+/home/yagamine/Documents/Project/library-management/src/main/java/com/library/controller/MainController.java
+/home/yagamine/Documents/Project/library-management/src/main/java/com/library/Main.java
 /home/yagamine/Documents/Project/library-management/src/main/java/com/library/dao/DAO.java
 /home/yagamine/Documents/Project/library-management/src/main/java/com/library/exception/LimiteEmpruntDepasseeException.java
 /home/yagamine/Documents/Project/library-management/src/main/java/com/library/exception/LivreIndisponibleException.java
 /home/yagamine/Documents/Project/library-management/src/main/java/com/library/exception/MembreInactifException.java
+/home/yagamine/Documents/Project/library-management/src/main/java/com/library/util/DateUtils.java
 /home/yagamine/Documents/Project/library-management/src/main/java/com/library/util/DatabaseConnection.java

@@ -1,0 +1,60 @@
+-J-Duser.language=
+-J-Duser.country=
+@options
+@packages
+--no-fonts
+-classpath
+'/home/yagamine/.m2/repository/org/openjfx/javafx-controls/21.0.1/javafx-controls-21.0.1.jar:/home/yagamine/.m2/repository/org/openjfx/javafx-controls/21.0.1/javafx-controls-21.0.1-linux.jar:/home/yagamine/.m2/repository/org/openjfx/javafx-graphics/21.0.1/javafx-graphics-21.0.1.jar:/home/yagamine/.m2/repository/org/openjfx/javafx-graphics/21.0.1/javafx-graphics-21.0.1-linux.jar:/home/yagamine/.m2/repository/org/openjfx/javafx-base/21.0.1/javafx-base-21.0.1.jar:/home/yagamine/.m2/repository/org/openjfx/javafx-base/21.0.1/javafx-base-21.0.1-linux.jar:/home/yagamine/.m2/repository/org/openjfx/javafx-fxml/21.0.1/javafx-fxml-21.0.1.jar:/home/yagamine/.m2/repository/org/openjfx/javafx-fxml/21.0.1/javafx-fxml-21.0.1-linux.jar:/home/yagamine/.m2/repository/com/mysql/mysql-connector-j/8.3.0/mysql-connector-j-8.3.0.jar:/home/yagamine/.m2/repository/com/google/protobuf/protobuf-java/3.25.1/protobuf-java-3.25.1.jar'
+-encoding
+'UTF-8'
+-protected
+-source
+'17'
+-sourcepath
+'/home/yagamine/Documents/Project/library-management/src/main/java'
+-author
+-bottom
+'Copyright &#169; 2025. All rights reserved.'
+-charset
+'UTF-8'
+-d
+'/home/yagamine/Documents/Project/library-management/target/reports/apidocs'
+-docencoding
+'UTF-8'
+-doctitle
+'library-management 1.0-SNAPSHOT API'
+-use
+-version
+-windowtitle
+'library-management 1.0-SNAPSHOT API'
+com.library.util
+com.library.dao
+com.library.exception
+com.library.controller
+com.library
+/home/yagamine/.m2/repository/org/openjfx/javafx-controls/21.0.1/javafx-controls-21.0.1.jar = 1697565369000
+/home/yagamine/.m2/repository/org/openjfx/javafx-controls/21.0.1/javafx-controls-21.0.1-linux.jar = 1697565375000
+/home/yagamine/.m2/repository/org/openjfx/javafx-graphics/21.0.1/javafx-graphics-21.0.1.jar = 1697565424000
+/home/yagamine/.m2/repository/org/openjfx/javafx-graphics/21.0.1/javafx-graphics-21.0.1-linux.jar = 1697565460000
+/home/yagamine/.m2/repository/org/openjfx/javafx-base/21.0.1/javafx-base-21.0.1.jar = 1697565344000
+/home/yagamine/.m2/repository/org/openjfx/javafx-base/21.0.1/javafx-base-21.0.1-linux.jar = 1697565344000
+/home/yagamine/.m2/repository/org/openjfx/javafx-fxml/21.0.1/javafx-fxml-21.0.1.jar = 1697565403000
+/home/yagamine/.m2/repository/org/openjfx/javafx-fxml/21.0.1/javafx-fxml-21.0.1-linux.jar = 1697565416000
+/home/yagamine/.m2/repository/com/mysql/mysql-connector-j/8.3.0/mysql-connector-j-8.3.0.jar = 1705352827000
+/home/yagamine/.m2/repository/com/google/protobuf/protobuf-java/3.25.1/protobuf-java-3.25.1.jar = 1700088488000
+/home/yagamine/Documents/Project/library-management/src/main/java = 1766709166036
+/home/yagamine/Documents/Project/library-management/target/reports/apidocs/element-list = 1766736532658
+/home/yagamine/Documents/Project/library-management/target/reports/apidocs/serialized-form.html = 1766736532724
+/home/yagamine/Documents/Project/library-management/target/reports/apidocs/overview-tree.html = 1766736532798
+/home/yagamine/Documents/Project/library-management/target/reports/apidocs/index.html = 1766736532804
+/home/yagamine/Documents/Project/library-management/target/reports/apidocs/allclasses-index.html = 1766736532828
+/home/yagamine/Documents/Project/library-management/target/reports/apidocs/allpackages-index.html = 1766736532831
+/home/yagamine/Documents/Project/library-management/target/reports/apidocs/module-search-index.js = 1766736532831
+/home/yagamine/Documents/Project/library-management/target/reports/apidocs/package-search-index.js = 1766736532831
+/home/yagamine/Documents/Project/library-management/target/reports/apidocs/type-search-index.js = 1766736532831
+/home/yagamine/Documents/Project/library-management/target/reports/apidocs/member-search-index.js = 1766736532831
+/home/yagamine/Documents/Project/library-management/target/reports/apidocs/tag-search-index.js = 1766736532834
+/home/yagamine/Documents/Project/library-management/target/reports/apidocs/index-all.html = 1766736532858
+/home/yagamine/Documents/Project/library-management/target/reports/apidocs/search.html = 1766736532861
+/home/yagamine/Documents/Project/library-management/target/reports/apidocs/overview-summary.html = 1766736532864
+/home/yagamine/Documents/Project/library-management/target/reports/apidocs/help-doc.html = 1766736532868
