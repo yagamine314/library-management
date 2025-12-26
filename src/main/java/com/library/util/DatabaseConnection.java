@@ -25,7 +25,7 @@ public class DatabaseConnection {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             this.connection = DriverManager.getConnection(URL + OPTIONS, USER, PASSWORD);
-            System.out.println("✅ Connexion DB établie!");
+            System.out.println("Connexion DB établie!");
         } catch (ClassNotFoundException e) {
             throw new RuntimeException("❌ Driver MySQL introuvable!", e);
         } catch (SQLException e) {
@@ -66,9 +66,9 @@ public class DatabaseConnection {
         if (connection != null) {
             try {
                 connection.close();
-                System.out.println("✅ Connexion fermée.");
+                System.out.println(" Connexion fermée.");
             } catch (SQLException e) {
-                System.err.println("❌ Erreur fermeture: " + e.getMessage());
+                System.err.println("Erreur fermeture: " + e.getMessage());
             }
         }
     }

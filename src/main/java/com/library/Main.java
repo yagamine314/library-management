@@ -1,10 +1,8 @@
 package com.library;
 
 import com.library.controller.MainController;
+
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 /**
@@ -17,8 +15,8 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) {
         try {
-            // TODO: Charger MainView.fxml quand il sera créé
-            // Pour l'instant, juste une fenêtre vide
+           
+            
             
             primaryStage.setTitle("Système de Gestion de Bibliothèque");
             primaryStage.setWidth(1200);
@@ -31,7 +29,7 @@ public class Main extends Application {
                 }
             });
             
-            // primaryStage.show(); // À décommenter plus tard
+            // primaryStage.show(); // nut now
             
             System.out.println("✅ Application prête (interface pas encore créée)");
             
