@@ -1,8 +1,8 @@
-# 📚 Système de Gestion de Bibliothèque
+# Système de Gestion de Bibliothèque
 
 Application Java avec JavaFX pour gérer une bibliothèque.
 
-## 🛠️ Technologies
+##  Technologies
 
 - **Java 17**
 - **JavaFX 21** 
@@ -10,7 +10,7 @@ Application Java avec JavaFX pour gérer une bibliothèque.
 - **Maven 3.9**
 - **JUnit 5**
 
-## 📦 Installation
+##  Installation
 
 ### 1. Cloner le projet
 ```bash
@@ -39,17 +39,17 @@ mvn clean compile
 mvn test
 ```
 
-## 🏗️ Architecture
+##  Architecture
 ```
-┌─────────────────────────────┐
-│   PRÉSENTATION (JavaFX)     │
-├─────────────────────────────┤
-│   SERVICE (Logique Métier)  │
-├─────────────────────────────┤
-│   DAO (Accès aux Données)   │
-├─────────────────────────────┤
-│   MODÈLE (Entités)          │
-└─────────────────────────────┘
+
+   PRÉSENTATION (JavaFX)     
+
+   SERVICE (Logique Métier)
+
+   DAO (Accès aux Données)   
+
+   MODÈLE (Entités)          
+
 ```
 
 
@@ -60,4 +60,3 @@ mvn test
 Tests run: 3, Failures: 0, Errors: 0
 ```
 
-**Status:** ✅ Phase 1 terminée | **Version:** 1.0-SNAPSHOT
