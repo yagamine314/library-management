@@ -1,0 +1,6 @@
+com/library/dao/DAO.class
+com/library/exception/LimiteEmpruntDepasseeException.class
+com/library/exception/ValidationException.class
+com/library/exception/MembreInactifException.class
+com/library/util/DatabaseConnection.class
+com/library/exception/LivreIndisponibleException.class
