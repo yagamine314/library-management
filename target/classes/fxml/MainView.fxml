@@ -11,21 +11,21 @@
     <center>
         <TabPane fx:id="mainTabPane" tabClosingPolicy="UNAVAILABLE">
             
-            <!-- Onglet Livres (à compléter par Étudiant A) -->
+            <!-- Onglet Livres  -->
             <Tab text="Livres">
                 <content>
                     <Label text="Module Livres - À développer par Étudiant A" />
                 </content>
             </Tab>
             
-            <!-- Onglet Membres (à compléter par Étudiant B) -->
+            <!-- Onglet Membres  -->
             <Tab text="Membres">
                 <content>
                     <Label text="Module Membres - À développer par Étudiant B" />
                 </content>
             </Tab>
             
-            <!-- Onglet Emprunts (à compléter par Étudiant C) -->
+            <!-- Onglet Emprunts  -->
             <Tab text="Emprunts">
                 <content>
                     <Label text="Module Emprunts - À développer par Étudiant C" />

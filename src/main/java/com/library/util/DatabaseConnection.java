@@ -27,9 +27,9 @@ public class DatabaseConnection {
             this.connection = DriverManager.getConnection(URL + OPTIONS, USER, PASSWORD);
             System.out.println("Connexion DB établie!");
         } catch (ClassNotFoundException e) {
-            throw new RuntimeException("❌ Driver MySQL introuvable!", e);
+            throw new RuntimeException("Driver MySQL introuvable", e);
         } catch (SQLException e) {
-            throw new RuntimeException("❌ Erreur connexion DB!", e);
+            throw new RuntimeException("Erreur connexion DB", e);
         }
     }
     

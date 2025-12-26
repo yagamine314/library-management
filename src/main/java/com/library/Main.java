@@ -31,7 +31,7 @@ public class Main extends Application {
             
             // primaryStage.show(); // nut now
             
-            System.out.println("✅ Application prête (interface pas encore créée)");
+            System.out.println("Jaafar, do your work");
             
         } catch (Exception e) {
             e.printStackTrace();
