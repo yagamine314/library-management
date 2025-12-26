@@ -105,7 +105,7 @@ INSERT INTO emprunts (isbn_livre, id_membre, date_emprunt, date_retour_prevue, d
 -- ============================================
 -- VÉRIFICATION
 -- ============================================
-SELECT 'Base de données créée avec succès!' AS message;
+SELECT 'Database created' AS message;
 SELECT COUNT(*) AS total_livres FROM livres;
 SELECT COUNT(*) AS total_membres FROM membres;
 SELECT COUNT(*) AS total_emprunts FROM emprunts;
