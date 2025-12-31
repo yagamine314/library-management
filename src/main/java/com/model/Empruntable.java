@@ -1,5 +1,7 @@
 package com.model;
 
+import com.library.exception.LivreIndisponibleException;
+
 /**
  * Interface pour les objets empruntables dans la bibliothèque.
  */
@@ -13,8 +15,9 @@ public interface Empruntable {
 
     /**
      * Marque l'objet comme emprunté.
+     * @throws LivreIndisponibleException 
      */
-    void emprunter();
+    void emprunter() throws LivreIndisponibleException;
 
     /**
      * Marque l'objet comme retourné.

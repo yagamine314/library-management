@@ -1,5 +1,7 @@
 package com.model;
 
+import com.library.exception.LivreIndisponibleException;
+
 /**
  * Classe représentant un livre dans la bibliothèque.
  * Hérite de Document et implémente l'interface Empruntable.
@@ -26,12 +28,12 @@ public class Livre extends Document implements Empruntable {
     }
 
     @Override
-    public void emprunter() {
+    public void emprunter() throws LivreIndisponibleException {
         if (disponible) {
             this.disponible = false;
             this.updatedAt = java.time.LocalDateTime.now();
         } else {
-            throw new IllegalStateException("Le livre n'est pas disponible pour emprunt.");
+            throw LivreIndisponibleException.dejaEmprunte(this.isbn);
         }
     }
 
