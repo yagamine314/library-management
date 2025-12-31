@@ -28,7 +28,7 @@
             <!-- Onglet Emprunts  -->
             <Tab text="Emprunts">
                 <content>
-                    <Label text="Module Emprunts - À développer par Étudiant C" />
+                    <fx:include source="EmpruntView.fxml" />
                 </content>
             </Tab>
             
