@@ -1,11 +1,11 @@
-package com.service;
+package com.library.service;
 
 import com.library.dao.LivreDAO;
 import com.library.dao.impl.LivreDAOImpl;
 import com.library.exception.LivreIndisponibleException;
 import com.library.exception.ValidationException;
 import com.library.util.StringValidator;
-import com.model.Livre;
+import com.library.model.Livre;
 import java.sql.SQLException;
 import java.util.List;
 

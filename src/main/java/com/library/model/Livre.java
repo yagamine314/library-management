@@ -1,4 +1,4 @@
-package com.model;
+package com.library.model;
 
 import com.library.exception.LivreIndisponibleException;
 

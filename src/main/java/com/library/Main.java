@@ -29,7 +29,7 @@ public class Main extends Application {
                 }
             });
             
-            // primaryStage.show(); // nut now
+            //primaryStage.show(); // nut now
             
             System.out.println("Jaafar, do your work");
             
