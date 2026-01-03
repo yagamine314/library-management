@@ -4,6 +4,7 @@ import com.library.dao.LivreDAO;
 import com.library.util.DatabaseConnection;
 import com.model.Livre;
 import java.sql.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -154,6 +155,8 @@ public class LivreDAOImpl implements LivreDAO {
         livre.setAuteur(rs.getString("auteur"));
         livre.setAnneePublication(rs.getInt("annee_publication"));
         livre.setDisponible(rs.getBoolean("disponible"));
+        livre.setCreatedAt(rs.getTimestamp("created_at").toLocalDateTime());
+        livre.setUpdatedAt(rs.getTimestamp("updated_at").toLocalDateTime());
         return livre;
     }
 }
