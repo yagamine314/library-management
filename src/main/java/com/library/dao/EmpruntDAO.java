@@ -3,9 +3,6 @@ package com.library.dao;
 import java.sql.SQLException;
 import java.util.List;
 
-import com.library.exception.LimiteEmpruntDepasseeException;
-import com.library.exception.LivreIndisponibleException;
-import com.library.exception.MembreInactifException;
 import com.library.model.Emprunt;
 
 /**
@@ -16,7 +13,7 @@ public interface EmpruntDAO {
     /**
      * Enregistre un nouvel emprunt
      */
-    void save(Emprunt emprunt) throws SQLException, LivreIndisponibleException, MembreInactifException, LimiteEmpruntDepasseeException;
+    void save(Emprunt emprunt) throws SQLException;
 
     /**
      * Recherche un emprunt par son ID
@@ -62,4 +59,34 @@ public interface EmpruntDAO {
      * Compte le nombre d'emprunts en cours pour un membre
      */
     int countEmpruntsEnCoursByMembre(int membreId) throws SQLException;
+
+    /**
+     * Vérifie si un livre existe
+     */
+    boolean livreExiste(String isbn) throws SQLException;
+
+    /**
+     * Vérifie si un membre existe
+     */
+    boolean membreExiste(int membreId) throws SQLException;
+
+    /**
+     * Vérifie si un livre est disponible
+     */
+    boolean isLivreDisponible(String isbn) throws SQLException;
+
+    /**
+     * Marque un livre comme indisponible
+     */
+    void marquerLivreIndisponible(String isbn) throws SQLException;
+
+    /**
+     * Marque un livre comme disponible
+     */
+    void marquerLivreDisponible(String isbn) throws SQLException;
+
+    /**
+     * Vérifie si un membre est actif
+     */
+    boolean isMembreActif(int membreId) throws SQLException;
 }

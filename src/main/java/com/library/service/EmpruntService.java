@@ -1,16 +1,18 @@
 package com.library.service;
 
-import com.library.dao.EmpruntDAO;
-import com.library.dao.impl.EmpruntDAOImpl;
-import com.library.model.Emprunt;
-import com.library.exception.*;
-
 import java.math.BigDecimal;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+
+import com.library.dao.EmpruntDAO;
+import com.library.dao.impl.EmpruntDAOImpl;
+import com.library.exception.LimiteEmpruntDepasseeException;
+import com.library.exception.LivreIndisponibleException;
+import com.library.exception.MembreInactifException;
+import com.library.model.Emprunt;
 
 /**
  * Service métier pour la gestion des emprunts
@@ -30,10 +32,39 @@ public class EmpruntService {
     public void emprunterLivre(String isbn, int membreId, Date dateRetourPrevue) throws SQLException,
             LivreIndisponibleException, MembreInactifException, LimiteEmpruntDepasseeException {
 
+        // Vérifier si le livre existe
+        if (!empruntDAO.livreExiste(isbn)) {
+            throw new SQLException("Le livre avec l'ISBN " + isbn + " n'existe pas");
+        }
+
+        // Vérifier si le livre est disponible
+        if (!empruntDAO.isLivreDisponible(isbn)) {
+            throw new LivreIndisponibleException(isbn);
+        }
+
+        // Vérifier si le membre existe
+        if (!empruntDAO.membreExiste(membreId)) {
+            throw new SQLException("Le membre avec l'ID " + membreId + " n'existe pas");
+        }
+
+        // Vérifier si le membre est actif
+        if (!empruntDAO.isMembreActif(membreId)) {
+            throw new MembreInactifException(membreId);
+        }
+
+        // Vérifier la limite d'emprunts
+        int empruntsEnCours = empruntDAO.countEmpruntsEnCoursByMembre(membreId);
+        if (empruntsEnCours >= 3) {
+            throw new LimiteEmpruntDepasseeException(membreId, empruntsEnCours);
+        }
+
         Date dateEmprunt = Date.valueOf(LocalDate.now());
         Emprunt emprunt = new Emprunt(isbn, membreId, dateEmprunt, dateRetourPrevue);
 
         empruntDAO.save(emprunt);
+
+        // Marquer le livre comme indisponible
+        empruntDAO.marquerLivreIndisponible(isbn);
     }
 
     /**
@@ -57,6 +88,9 @@ public class EmpruntService {
         empruntDAO.update(emprunt);
 
         // Marquer le livre comme disponible
+        empruntDAO.marquerLivreDisponible(emprunt.getIsbnLivre());
+
+        // Enregistrer le retour de l'emprunt
         empruntDAO.retournerLivre(empruntId, dateRetourEffective);
 
         return penalite;
@@ -176,12 +210,12 @@ public class EmpruntService {
 
         double tauxRetourATemps = totalRetours > 0 ? (double) retoursATemps / totalRetours * 100 : 0;
 
-        return String.format(
-            "Statistiques des emprunts:\n" +
-            "- Total emprunts: %d\n" +
-            "- Emprunts en cours: %d\n" +
-            "- Emprunts terminés: %d\n" +
-            "- Taux de retour à temps: %.1f%%",
+        return String.format("""
+                             Statistiques des emprunts:
+                             - Total emprunts: %d
+                             - Emprunts en cours: %d
+                             - Emprunts termin\u00e9s: %d
+                             """,
             totalEmprunts, empruntsEnCoursCount, empruntsTermines, tauxRetourATemps
         );
     }
