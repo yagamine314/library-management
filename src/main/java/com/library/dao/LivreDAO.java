@@ -1,6 +1,6 @@
 package com.library.dao;
 
-import com.model.Livre;
+import com.library.model.Livre;
 import java.sql.SQLException;
 import java.util.List;
 

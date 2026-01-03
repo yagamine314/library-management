@@ -14,7 +14,7 @@ Application Java avec JavaFX pour gérer une bibliothèque.
 
 ### 1. Cloner le projet
 ```bash
-git clone [URL_REPO]
+git clone https://github.com/yagamine314/library-management
 cd library-management
 ```
 

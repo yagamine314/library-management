@@ -2,7 +2,7 @@ package com.library.dao.impl;
 
 import com.library.dao.LivreDAO;
 import com.library.util.DatabaseConnection;
-import com.model.Livre;
+import com.library.model.Livre;
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;

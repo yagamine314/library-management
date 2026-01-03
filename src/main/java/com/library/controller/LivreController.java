@@ -2,8 +2,8 @@ package com.library.controller;
 
 import com.library.exception.LivreIndisponibleException;
 import com.library.exception.ValidationException;
-import com.model.Livre;
-import com.service.BibliothequeService;
+import com.library.model.Livre;
+import com.library.service.BibliothequeService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
