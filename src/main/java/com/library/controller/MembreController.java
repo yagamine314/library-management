@@ -51,13 +51,17 @@ public class MembreController {
     private ObservableList<Membre> membresList = FXCollections.observableArrayList();
     private ObservableList<Emprunt> historiqueList = FXCollections.observableArrayList();
     
-    public void setBibliothequeService(BibliothequeService service) throws SQLException{
-        this.bibliothequeService = service;
-        loadMembres();
-    }
-    
     @FXML
     private void initialize() {
+        // Initialiser le service
+        try {
+            bibliothequeService = new BibliothequeService();
+        } catch (SQLException e) {
+            showAlert("Erreur", "Impossible d'initialiser le service: " + e.getMessage(), 
+                     Alert.AlertType.ERROR);
+            return;
+        }
+        
         // Configuration de la table des membres
         idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
         nomCol.setCellValueFactory(new PropertyValueFactory<>("nom"));
@@ -70,25 +74,46 @@ public class MembreController {
             );
         });
         
+        // Lier la liste à la table
+        membresTable.setItems(membresList);
+        
         // Configuration de la table d'historique
         livreCol.setCellValueFactory(new PropertyValueFactory<>("livreTitre"));
         dateEmpruntCol.setCellValueFactory(new PropertyValueFactory<>("dateEmprunt"));
         dateRetourCol.setCellValueFactory(new PropertyValueFactory<>("dateRetourPrevue"));
         statutEmpruntCol.setCellValueFactory(new PropertyValueFactory<>("statut"));
         
+        // Listener pour la sélection dans la table
+        membresTable.getSelectionModel().selectedItemProperty().addListener(
+            (obs, oldSelection, newSelection) -> {
+                if (newSelection != null) {
+                    try {
+                        showMembreDetails(newSelection);
+                    } catch (ValidationException | SQLException e) {
+                        showAlert("Erreur", e.getMessage(), Alert.AlertType.ERROR);
+                    }
+                }
+            }
+        );
         
         // Initialiser la date d'adhésion à aujourd'hui
         dateAdhesionPicker.setValue(LocalDate.now());
+        
+        // Charger les membres
+        try {
+            loadMembres();
+        } catch (SQLException e) {
+            showAlert("Erreur", "Impossible de charger les membres: " + e.getMessage(), 
+                     Alert.AlertType.ERROR);
+        }
     }
     
     private void loadMembres() throws SQLException {
-        BibliothequeService bibliothequeService = new BibliothequeService();
         List<Membre> membres = bibliothequeService.getAllMembres();
         membresList.setAll(membres);
-        membresTable.setItems(membresList);
     }
     
-    private void showMembreDetails(Membre membre) throws ValidationException , SQLException{
+    private void showMembreDetails(Membre membre) throws ValidationException, SQLException {
         if (membre != null) {
             idField.setText(String.valueOf(membre.getId()));
             nomField.setText(membre.getNom());
@@ -101,8 +126,7 @@ public class MembreController {
         }
     }
     
-    private void loadHistorique(int membreId) throws SQLException , ValidationException {
-        BibliothequeService bibliothequeService = new BibliothequeService();
+    private void loadHistorique(int membreId) throws SQLException, ValidationException {
         List<Emprunt> emprunts = bibliothequeService.getHistoriqueEmprunts(membreId);
         historiqueList.setAll(emprunts);
         historiqueTable.setItems(historiqueList);
@@ -138,16 +162,15 @@ public class MembreController {
         
         if (validateFields()) {
             try {
-                selectedMembre.setNom(nomField.getText());
-                selectedMembre.setPrenom(prenomField.getText());
-                selectedMembre.setEmail(emailField.getText());
-                selectedMembre.setActif(actifCheckBox.isSelected());
-                                // 1. Récupère les valeurs dont tu as besoin
-                int membreId = selectedMembre.getId(); // ou autre variable
-                Membre membreModifie = new Membre(); // méthode qui crée l'objet Membre
-
-                // 2. Appelle la méthode avec ces valeurs
-                bibliothequeService.modifierMembre(membreId, membreModifie);
+                // Créer un objet avec les nouvelles données
+                Membre membreModifie = new Membre();
+                membreModifie.setNom(nomField.getText());
+                membreModifie.setPrenom(prenomField.getText());
+                membreModifie.setEmail(emailField.getText());
+                membreModifie.setActif(actifCheckBox.isSelected());
+                
+                // Appeler le service avec l'ID du membre sélectionné
+                bibliothequeService.modifierMembre(selectedMembre.getId(), membreModifie);
                 loadMembres();
                 showAlert("Succès", "Membre modifié avec succès.", Alert.AlertType.INFORMATION);
             } catch (Exception e) {
@@ -207,14 +230,17 @@ public class MembreController {
     }
     
     @FXML
-    private void handleRechercher() throws SQLException, ValidationException{
-        String searchText = searchField.getText().trim();
-        if (searchText.isEmpty())  {
-            loadMembres();
-        } else  {
-            List<Membre> membres = bibliothequeService.rechercherMembresParNom( searchText);
-            membresList.setAll(membres);
-            membresTable.setItems(membresList);
+    private void handleRechercher() {
+        try {
+            String searchText = searchField.getText().trim();
+            if (searchText.isEmpty()) {
+                loadMembres();
+            } else {
+                List<Membre> membres = bibliothequeService.rechercherMembresParNom(searchText);
+                membresList.setAll(membres);
+            }
+        } catch (SQLException | ValidationException e) {
+            showAlert("Erreur", e.getMessage(), Alert.AlertType.ERROR);
         }
     }
     
@@ -226,10 +252,13 @@ public class MembreController {
     }
     
     @FXML
-    private void handleAfficherActifs() throws SQLException {
-        List<Membre> membresActifs = bibliothequeService.getMembresActifs();
-        membresList.setAll(membresActifs);
-        membresTable.setItems(membresList);
+    private void handleAfficherActifs() {
+        try {
+            List<Membre> membresActifs = bibliothequeService.getMembresActifs();
+            membresList.setAll(membresActifs);
+        } catch (SQLException e) {
+            showAlert("Erreur", e.getMessage(), Alert.AlertType.ERROR);
+        }
     }
     
     private boolean validateFields() {

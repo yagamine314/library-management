@@ -2,31 +2,55 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
 
 <BorderPane xmlns="http://javafx.com/javafx/17" 
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.library.controller.MainController"
-            prefHeight="800.0" prefWidth="1200.0">
+            prefHeight="800.0" prefWidth="1200.0"
+            style="-fx-background-color: #f5f5f5;">
     
+    <!-- Header -->
+    <top>
+        <HBox style="-fx-background-color: #2c3e50; -fx-padding: 15;" spacing="10" alignment="CENTER_LEFT">
+            <Label text="📚 Système de Gestion de Bibliothèque" 
+                   style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: white;" />
+            <Region HBox.hgrow="ALWAYS"/>
+            <Label text="ESI - Projet Java POO" 
+                   style="-fx-font-size: 14px; -fx-text-fill: #ecf0f1;" />
+        </HBox>
+    </top>
+    
+    <!-- Main Content -->
     <center>
-        <TabPane fx:id="mainTabPane" tabClosingPolicy="UNAVAILABLE">
+        <TabPane fx:id="mainTabPane" tabClosingPolicy="UNAVAILABLE" 
+                 style="-fx-background-color: white;">
             
-            <!-- Onglet Livres  -->
-            <Tab text="Livres">
+            <!-- Onglet Livres -->
+            <Tab text="📖 Livres">
+                <graphic>
+                    <Label text="📖 Livres" style="-fx-font-size: 14px; -fx-font-weight: bold;"/>
+                </graphic>
                 <content>
-                    <Label text="Module Livres - À développer par Étudiant A" />
+                    <fx:include source="LivreView.fxml" />
                 </content>
             </Tab>
             
-            <!-- Onglet Membres  -->
-            <Tab text="Membres">
+            <!-- Onglet Membres -->
+            <Tab text="👥 Membres">
+                <graphic>
+                    <Label text="👥 Membres" style="-fx-font-size: 14px; -fx-font-weight: bold;"/>
+                </graphic>
                 <content>
-                    <Label text="Module Membres - À développer par Étudiant B" />
+                    <fx:include source="MembreView.fxml" />
                 </content>
             </Tab>
             
-            <!-- Onglet Emprunts  -->
-            <Tab text="Emprunts">
+            <!-- Onglet Emprunts -->
+            <Tab text="🔄 Emprunts">
+                <graphic>
+                    <Label text="🔄 Emprunts" style="-fx-font-size: 14px; -fx-font-weight: bold;"/>
+                </graphic>
                 <content>
                     <fx:include source="EmpruntView.fxml" />
                 </content>
@@ -34,5 +58,16 @@
             
         </TabPane>
     </center>
+    
+    <!-- Footer -->
+    <bottom>
+        <HBox style="-fx-background-color: #34495e; -fx-padding: 10;" spacing="10" alignment="CENTER">
+            <Label text="© 2024 - Équipe: Amine Benatti, Idriss Jabri, Hamza Ahaddad, Ilyas Jaafar" 
+                   style="-fx-text-fill: white; -fx-font-size: 12px;" />
+            <Region HBox.hgrow="ALWAYS"/>
+            <Label fx:id="statusLabel" text="✓ Connexion active" 
+                   style="-fx-text-fill: #2ecc71; -fx-font-size: 12px; -fx-font-weight: bold;" />
+        </HBox>
+    </bottom>
     
 </BorderPane>
