@@ -190,7 +190,7 @@ public class MembreDAOImpl implements MembreDAO {
     private Emprunt mapResultSetToEmprunt(ResultSet rs) throws SQLException {
     Emprunt emprunt = new Emprunt();
     emprunt.setId(rs.getInt("id"));
-    emprunt.setIsbnLivre(String.valueOf((rs.getInt("livre_id"))));
+    emprunt.setIdLivre(String.valueOf((rs.getInt("livre_id"))));
     emprunt.setIdMembre(rs.getInt("membre_id"));
     emprunt.setDateEmprunt(rs.getDate("date_emprunt"));
     
