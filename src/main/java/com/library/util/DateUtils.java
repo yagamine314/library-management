@@ -43,22 +43,21 @@ public class DateUtils {
         long jours = ChronoUnit.DAYS.between(dateRetourPrevue, dateRetourEffective);
         return Math.max(0, jours);
     }
-    
-    /**
-     * Calcule la pénalité de retard
-     * @return montant de la pénalité (0 si pas de retard)
-     */
-    public static double calculerPenalite(LocalDate dateRetourPrevue) {
-        long joursRetard = calculerJoursRetard(dateRetourPrevue);
-        return joursRetard * PENALITE_PAR_JOUR;
-    }
-    
+     
     /**
      * Calcule la pénalité avec date effective
      */
     public static double calculerPenalite(LocalDate dateRetourPrevue, LocalDate dateRetourEffective) {
         long joursRetard = calculerJoursRetard(dateRetourPrevue, dateRetourEffective);
         return joursRetard * PENALITE_PAR_JOUR;
+    }
+
+    /**
+     * Calcule la pénalité avec date effective (version BigDecimal)
+     */
+    public static java.math.BigDecimal calculerPenaliteBigDecimal(LocalDate dateRetourPrevue, LocalDate dateRetourEffective) {
+        long joursRetard = calculerJoursRetard(dateRetourPrevue, dateRetourEffective);
+        return java.math.BigDecimal.valueOf(joursRetard * PENALITE_PAR_JOUR);
     }
     
     /**

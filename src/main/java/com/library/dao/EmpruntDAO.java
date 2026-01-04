@@ -89,4 +89,14 @@ public interface EmpruntDAO {
      * Vérifie si un membre est actif
      */
     boolean isMembreActif(int membreId) throws SQLException;
+
+    /**
+     * Effectue un emprunt transactionnel (insère emprunt et marque livre indisponible)
+     */
+    void emprunterLivreTransactional(String isbn, int membreId, java.sql.Date dateEmprunt, java.sql.Date dateRetourPrevue) throws SQLException;
+
+    /**
+     * Effectue le retour transactionnel (met à jour emprunt et marque livre disponible)
+     */
+    void retournerEmpruntTransactional(int empruntId, java.sql.Date dateRetourEffective, java.math.BigDecimal penalite) throws SQLException;
 }

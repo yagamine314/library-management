@@ -4,15 +4,18 @@ import java.math.BigDecimal;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 import com.library.dao.EmpruntDAO;
 import com.library.dao.impl.EmpruntDAOImpl;
+import com.library.exception.EmpruntNotFoundException;
 import com.library.exception.LimiteEmpruntDepasseeException;
 import com.library.exception.LivreIndisponibleException;
 import com.library.exception.MembreInactifException;
+import com.library.exception.ValidationException;
 import com.library.model.Emprunt;
+import com.library.model.Livre;
+import com.library.util.DateUtils;
 
 /**
  * Service métier pour la gestion des emprunts
@@ -20,10 +23,15 @@ import com.library.model.Emprunt;
  */
 public class EmpruntService {
 
-    private final EmpruntDAO empruntDAO;
+    private static final int LIMITE_EMPRUNTS = 3;
+    private static final double PENALITE_PAR_JOUR = 5.0;
 
-    public EmpruntService() {
+    private final EmpruntDAO empruntDAO;
+    private final BibliothequeService bibliothequeService;
+
+    public EmpruntService() throws SQLException {
         this.empruntDAO = new EmpruntDAOImpl();
+        this.bibliothequeService = new BibliothequeService();
     }
 
     /**
@@ -32,66 +40,60 @@ public class EmpruntService {
     public void emprunterLivre(String isbn, int membreId, Date dateRetourPrevue) throws SQLException,
             LivreIndisponibleException, MembreInactifException, LimiteEmpruntDepasseeException {
 
-        // Vérifier si le livre existe
-        if (!empruntDAO.livreExiste(isbn)) {
-            throw new SQLException("Le livre avec l'ISBN " + isbn + " n'existe pas");
+        // Vérifier si le livre existe et récupérer ses infos
+        Livre livre;
+        try {
+            livre = bibliothequeService.trouverLivreParIsbn(isbn);
+        } catch (ValidationException e) {
+            throw new LivreIndisponibleException(isbn, "Aucun livre trouvé avec l'ISBN " + isbn + ".");
         }
 
         // Vérifier si le livre est disponible
-        if (!empruntDAO.isLivreDisponible(isbn)) {
+        if (!livre.isDisponible()) {
             throw new LivreIndisponibleException(isbn);
         }
 
-        // Vérifier si le membre existe
-        if (!empruntDAO.membreExiste(membreId)) {
-            throw new SQLException("Le membre avec l'ID " + membreId + " n'existe pas");
-        }
-
-        // Vérifier si le membre est actif
-        if (!empruntDAO.isMembreActif(membreId)) {
-            throw new MembreInactifException(membreId);
+        // Vérifier si le membre existe et est actif
+        try {
+            if (!bibliothequeService.isMembreActif(membreId)) {
+                throw new MembreInactifException(membreId);
+            }
+        } catch (ValidationException e) {
+            throw new MembreInactifException(membreId, "Aucun membre trouvé avec l'ID " + membreId + ".");
         }
 
         // Vérifier la limite d'emprunts
         int empruntsEnCours = empruntDAO.countEmpruntsEnCoursByMembre(membreId);
-        if (empruntsEnCours >= 3) {
+        if (empruntsEnCours >= LIMITE_EMPRUNTS) {
             throw new LimiteEmpruntDepasseeException(membreId, empruntsEnCours);
         }
 
         Date dateEmprunt = Date.valueOf(LocalDate.now());
-        Emprunt emprunt = new Emprunt(isbn, membreId, dateEmprunt, dateRetourPrevue);
 
-        empruntDAO.save(emprunt);
-
-        // Marquer le livre comme indisponible
-        empruntDAO.marquerLivreIndisponible(isbn);
+        // Utiliser la méthode transactionnelle
+        empruntDAO.emprunterLivreTransactional(livre.getId(), membreId, dateEmprunt, dateRetourPrevue);
     }
 
     /**
      * Enregistre le retour d'un livre
      */
-    public BigDecimal retournerLivre(int empruntId) throws SQLException {
+    public BigDecimal retournerLivre(int empruntId) throws EmpruntNotFoundException, SQLException {
         Date dateRetourEffective = Date.valueOf(LocalDate.now());
 
         // Récupérer l'emprunt pour calculer la pénalité
         Emprunt emprunt = empruntDAO.findById(empruntId);
         if (emprunt == null) {
-            throw new SQLException("Emprunt non trouvé");
+            throw new EmpruntNotFoundException(empruntId);
         }
 
         // Calculer la pénalité si retour en retard
-        BigDecimal penalite = calculerPenalite(emprunt.getDateRetourPrevue(), dateRetourEffective);
-        emprunt.setPenalite(penalite);
-        emprunt.setDateRetourEffective(dateRetourEffective);
+        BigDecimal penalite = DateUtils.calculerPenaliteBigDecimal(
+            emprunt.getDateRetourPrevue().toLocalDate(),
+            dateRetourEffective.toLocalDate()
+        );
 
-        // Mettre à jour l'emprunt
-        empruntDAO.update(emprunt);
-
-        // Marquer le livre comme disponible
-        empruntDAO.marquerLivreDisponible(emprunt.getIdLivre());
-
-        // Enregistrer le retour de l'emprunt
-        empruntDAO.retournerLivre(empruntId, dateRetourEffective);
+        // Utiliser la méthode transactionnelle
+        empruntDAO.retournerEmpruntTransactional(empruntId, dateRetourEffective, penalite);
 
         return penalite;
     }
@@ -172,20 +174,7 @@ public class EmpruntService {
         return empruntDAO.countEmpruntsEnCoursByMembre(membreId);
     }
 
-    /**
-     * Calcule la pénalité pour un retour en retard
-     * Règle: 5€ par jour de retard
-     */
-    private BigDecimal calculerPenalite(Date dateRetourPrevue, Date dateRetourEffective) {
-        if (dateRetourEffective.after(dateRetourPrevue)) {
-            long joursRetard = ChronoUnit.DAYS.between(
-                dateRetourPrevue.toLocalDate(),
-                dateRetourEffective.toLocalDate()
-            );
-            return BigDecimal.valueOf(joursRetard * 5.0);
-        }
-        return BigDecimal.ZERO;
-    }
+
 
     /**
      * Génère des statistiques sur les emprunts
@@ -215,6 +204,7 @@ public class EmpruntService {
                              - Total emprunts: %d
                              - Emprunts en cours: %d
                              - Emprunts termin\u00e9s: %d
+                             - Taux de retour à temps: %.2f%%
                              """,
             totalEmprunts, empruntsEnCoursCount, empruntsTermines, tauxRetourATemps
         );

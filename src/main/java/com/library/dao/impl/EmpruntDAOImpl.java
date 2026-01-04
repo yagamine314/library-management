@@ -301,6 +301,78 @@ public class EmpruntDAOImpl implements EmpruntDAO {
         return false;
     }
 
+    @Override
+    public void emprunterLivreTransactional(String idLivre, int membreId, java.sql.Date dateEmprunt, java.sql.Date dateRetourPrevue) throws SQLException {
+        Connection conn = DatabaseConnection.getInstance().getConnection();
+        conn.setAutoCommit(false);
+
+        try {
+            // Insérer l'emprunt
+            String sqlEmprunt = "INSERT INTO emprunts (id_livre, id_membre, date_emprunt, date_retour_prevue, penalite) VALUES (?, ?, ?, ?, ?)";
+            try (PreparedStatement stmt = conn.prepareStatement(sqlEmprunt)) {
+                stmt.setString(1, idLivre);
+                stmt.setInt(2, membreId);
+                stmt.setDate(3, dateEmprunt);
+                stmt.setDate(4, dateRetourPrevue);
+                stmt.setBigDecimal(5, java.math.BigDecimal.ZERO);
+                stmt.executeUpdate();
+            }
+
+            // Marquer le livre comme indisponible
+            String sqlLivre = "UPDATE livres SET disponible = FALSE WHERE id = ?";
+            try (PreparedStatement stmt = conn.prepareStatement(sqlLivre)) {
+                stmt.setString(1, idLivre);
+                stmt.executeUpdate();
+            }
+
+            conn.commit();
+
+        } catch (SQLException e) {
+            conn.rollback();
+            throw e;
+        } finally {
+            conn.setAutoCommit(true);
+        }
+    }
+
+    @Override
+    public void retournerEmpruntTransactional(int empruntId, java.sql.Date dateRetourEffective, java.math.BigDecimal penalite) throws SQLException {
+        Connection conn = DatabaseConnection.getInstance().getConnection();
+        conn.setAutoCommit(false);
+
+        try {
+            // Récupérer l'emprunt pour obtenir l'ISBN
+            Emprunt emprunt = findById(empruntId);
+            if (emprunt == null) {
+                throw new SQLException("Emprunt non trouvé");
+            }
+
+            // Mettre à jour l'emprunt
+            String sqlUpdate = "UPDATE emprunts SET date_retour_effective = ?, penalite = ? WHERE id = ?";
+            try (PreparedStatement stmt = conn.prepareStatement(sqlUpdate)) {
+                stmt.setDate(1, dateRetourEffective);
+                stmt.setBigDecimal(2, penalite);
+                stmt.setInt(3, empruntId);
+                stmt.executeUpdate();
+            }
+
+            // Marquer le livre comme disponible
+            String sqlLivre = "UPDATE livres SET disponible = TRUE WHERE id = ?";
+            try (PreparedStatement stmt = conn.prepareStatement(sqlLivre)) {
+                stmt.setString(1, emprunt.getIdLivre());
+                stmt.executeUpdate();
+            }
+
+            conn.commit();
+
+        } catch (SQLException e) {
+            conn.rollback();
+            throw e;
+        } finally {
+            conn.setAutoCommit(true);
+        }
+    }
+
     private Emprunt mapResultSetToEmprunt(ResultSet rs) throws SQLException {
         Emprunt emprunt = new Emprunt();
         emprunt.setId(rs.getInt("id"));

@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
 
+import com.library.exception.EmpruntNotFoundException;
 import com.library.exception.LimiteEmpruntDepasseeException;
 import com.library.exception.LivreIndisponibleException;
 import com.library.exception.MembreInactifException;
@@ -69,7 +70,11 @@ public class EmpruntController {
      * Constructeur par défaut.
      */
     public EmpruntController() {
-        this.empruntService = new EmpruntService();
+        try {
+            this.empruntService = new EmpruntService();
+        } catch (SQLException e) {
+            throw new RuntimeException("Erreur lors de l'initialisation du service d'emprunt", e);
+        }
         this.empruntsList = FXCollections.observableArrayList();
     }
 
@@ -88,7 +93,7 @@ public class EmpruntController {
     public void initialize() {
         // Configuration des colonnes de la table
         colId.setCellValueFactory(new PropertyValueFactory<>("id"));
-        colIsbnLivre.setCellValueFactory(new PropertyValueFactory<>("isbnLivre"));
+        colIsbnLivre.setCellValueFactory(new PropertyValueFactory<>("idLivre"));
         colIdMembre.setCellValueFactory(new PropertyValueFactory<>("idMembre"));
         colDateEmprunt.setCellValueFactory(new PropertyValueFactory<>("dateEmprunt"));
         colDateRetourPrevue.setCellValueFactory(new PropertyValueFactory<>("dateRetourPrevue"));
@@ -118,6 +123,16 @@ public class EmpruntController {
             }
 
             int membreId = Integer.parseInt(membreIdStr);
+            if (membreId <= 0) {
+                afficherMessage("L'ID du membre doit être un nombre positif", Alert.AlertType.ERROR);
+                return;
+            }
+
+            // Basic ISBN validation (should be 10 or 13 digits)
+            if (!isbn.matches("\\d{10}|\\d{13}")) {
+                afficherMessage("L'ISBN doit contenir 10 ou 13 chiffres", Alert.AlertType.ERROR);
+                return;
+            }
             Date dateRetour = Date.valueOf(dateRetourPrevue);
 
             empruntService.emprunterLivre(isbn, membreId, dateRetour);
@@ -159,7 +174,7 @@ public class EmpruntController {
 
         } catch (NumberFormatException e) {
             afficherMessage("L'ID de l'emprunt doit être un nombre valide", Alert.AlertType.ERROR);
-        } catch (SQLException e) {
+        } catch (EmpruntNotFoundException | SQLException e) {
             afficherMessage("Erreur lors du retour: " + e.getMessage(), Alert.AlertType.ERROR);
         }
     }
