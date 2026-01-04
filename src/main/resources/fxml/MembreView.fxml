@@ -39,11 +39,8 @@
                     <TableColumn fx:id="nomColumn" text="Nom" prefWidth="150"/>
                     <TableColumn fx:id="prenomColumn" text="Prénom" prefWidth="150"/>
                     <TableColumn fx:id="emailColumn" text="Email" prefWidth="200"/>
-                    <TableColumn fx:id="actionsColumn" text="Actions" prefWidth="150">
-                        <cellFactory>
-                            <fx:include source="ActionButtonsCell.fxml"/>
-                        </cellFactory>
-                    </TableColumn>
+
+                    <TableColumn fx:id="actionsColumn" text="Actions" prefWidth="150"/>
                 </columns>
             </TableView>
             

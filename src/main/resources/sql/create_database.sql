@@ -9,6 +9,7 @@ USE library_db;
 -- ============================================
 -- TABLE: livres
 -- ============================================
+
 CREATE TABLE livres (
     id VARCHAR(50) PRIMARY KEY,
     isbn VARCHAR(20) NOT NULL UNIQUE,
@@ -22,7 +23,8 @@ CREATE TABLE livres (
     INDEX idx_titre (titre),
     INDEX idx_auteur (auteur),
     INDEX idx_disponible (disponible),
-    INDEX idx_isbn (isbn)
+    INDEX idx_isbn (isbn),
+    INDEX idx_id (id)
 ) ENGINE=InnoDB;
 
 -- ============================================
