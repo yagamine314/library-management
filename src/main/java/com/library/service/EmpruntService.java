@@ -88,7 +88,7 @@ public class EmpruntService {
         empruntDAO.update(emprunt);
 
         // Marquer le livre comme disponible
-        empruntDAO.marquerLivreDisponible(emprunt.getIsbnLivre());
+        empruntDAO.marquerLivreDisponible(emprunt.getIdLivre());
 
         // Enregistrer le retour de l'emprunt
         empruntDAO.retournerLivre(empruntId, dateRetourEffective);
@@ -120,8 +120,8 @@ public class EmpruntService {
     /**
      * Récupère les emprunts d'un livre
      */
-    public List<Emprunt> getEmpruntsByLivre(String isbn) throws SQLException {
-        return empruntDAO.findByLivreIsbn(isbn);
+    public List<Emprunt> getEmpruntsByLivre(String idLivre) throws SQLException {
+        return empruntDAO.findByLivreId(idLivre);
     }
 
     /**

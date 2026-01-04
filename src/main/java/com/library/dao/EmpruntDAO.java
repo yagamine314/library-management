@@ -33,7 +33,7 @@ public interface EmpruntDAO {
     /**
      * Récupère les emprunts d'un livre
      */
-    List<Emprunt> findByLivreIsbn(String isbn) throws SQLException;
+    List<Emprunt> findByLivreId(String id) throws SQLException;
 
     /**
      * Récupère les emprunts non retournés

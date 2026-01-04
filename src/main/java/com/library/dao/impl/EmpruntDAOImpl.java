@@ -25,9 +25,9 @@ public class EmpruntDAOImpl implements EmpruntDAO {
 
         try {
             // Insérer l'emprunt
-            String sql = "INSERT INTO emprunts (isbn_livre, id_membre, date_emprunt, date_retour_prevue, penalite) VALUES (?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO emprunts (id_livre, id_membre, date_emprunt, date_retour_prevue, penalite) VALUES (?, ?, ?, ?, ?)";
             try (PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-                stmt.setString(1, emprunt.getIsbnLivre());
+                stmt.setString(1, emprunt.getIdLivre());
                 stmt.setInt(2, emprunt.getIdMembre());
                 stmt.setDate(3, emprunt.getDateEmprunt());
                 stmt.setDate(4, emprunt.getDateRetourPrevue());
@@ -104,14 +104,14 @@ public class EmpruntDAOImpl implements EmpruntDAO {
     }
 
     @Override
-    public List<Emprunt> findByLivreIsbn(String isbn) throws SQLException {
+    public List<Emprunt> findByLivreId(String id) throws SQLException {
         List<Emprunt> emprunts = new ArrayList<>();
-        String sql = "SELECT * FROM emprunts WHERE isbn_livre = ? ORDER BY date_emprunt DESC";
+        String sql = "SELECT * FROM emprunts WHERE id_livre = ? ORDER BY date_emprunt DESC";
 
         try (Connection conn = DatabaseConnection.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            stmt.setString(1, isbn);
+            stmt.setString(1, id);
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
                     emprunts.add(mapResultSetToEmprunt(rs));
@@ -139,13 +139,13 @@ public class EmpruntDAOImpl implements EmpruntDAO {
 
     @Override
     public void update(Emprunt emprunt) throws SQLException {
-        String sql = "UPDATE emprunts SET isbn_livre = ?, id_membre = ?, date_emprunt = ?, " +
+        String sql = "UPDATE emprunts SET id_livre = ?, id_membre = ?, date_emprunt = ?, " +
                      "date_retour_prevue = ?, date_retour_effective = ?, penalite = ? WHERE id = ?";
 
         try (Connection conn = DatabaseConnection.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            stmt.setString(1, emprunt.getIsbnLivre());
+            stmt.setString(1, emprunt.getIdLivre());
             stmt.setInt(2, emprunt.getIdMembre());
             stmt.setDate(3, emprunt.getDateEmprunt());
             stmt.setDate(4, emprunt.getDateRetourPrevue());
@@ -304,7 +304,7 @@ public class EmpruntDAOImpl implements EmpruntDAO {
     private Emprunt mapResultSetToEmprunt(ResultSet rs) throws SQLException {
         Emprunt emprunt = new Emprunt();
         emprunt.setId(rs.getInt("id"));
-        emprunt.setIsbnLivre(rs.getString("isbn_livre"));
+        emprunt.setIdLivre(rs.getString("id_livre"));
         emprunt.setIdMembre(rs.getInt("id_membre"));
         emprunt.setDateEmprunt(rs.getDate("date_emprunt"));
         emprunt.setDateRetourPrevue(rs.getDate("date_retour_prevue"));

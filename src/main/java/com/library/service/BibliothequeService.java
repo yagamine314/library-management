@@ -99,11 +99,10 @@ public class BibliothequeService {
     }
 
     /**
-     * Supprime un livre par ISBN.
+     * Supprime un livre par identifiant.
      */
-    public void supprimerLivre(String isbn) throws SQLException, ValidationException {
-        StringValidator.validateISBN(isbn);
-        livreDAO.delete(isbn);
+    public void supprimerLivre(Object id) throws SQLException {
+        livreDAO.delete(id);
     }
 
     /**
