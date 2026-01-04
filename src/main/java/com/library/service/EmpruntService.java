@@ -8,11 +8,14 @@ import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 import com.library.dao.EmpruntDAO;
+import com.library.dao.LivreDAO;
 import com.library.dao.impl.EmpruntDAOImpl;
+import com.library.dao.impl.LivreDAOImpl;
 import com.library.exception.LimiteEmpruntDepasseeException;
 import com.library.exception.LivreIndisponibleException;
 import com.library.exception.MembreInactifException;
 import com.library.model.Emprunt;
+import com.library.model.Livre;
 
 /**
  * Service métier pour la gestion des emprunts
@@ -21,9 +24,11 @@ import com.library.model.Emprunt;
 public class EmpruntService {
 
     private final EmpruntDAO empruntDAO;
+    private final LivreDAO livreDAO;
 
-    public EmpruntService() {
+    public EmpruntService() throws SQLException {
         this.empruntDAO = new EmpruntDAOImpl();
+        this.livreDAO = new LivreDAOImpl();
     }
 
     /**
@@ -32,13 +37,12 @@ public class EmpruntService {
     public void emprunterLivre(String isbn, int membreId, Date dateRetourPrevue) throws SQLException,
             LivreIndisponibleException, MembreInactifException, LimiteEmpruntDepasseeException {
 
-        // Vérifier si le livre existe
-        if (!empruntDAO.livreExiste(isbn)) {
-            throw new SQLException("Le livre avec l'ISBN " + isbn + " n'existe pas");
+        // Vérifier si le livre existe et est disponible
+        Livre livre = livreDAO.findByIsbn(isbn);
+        if (livre == null) {
+            throw new LivreIndisponibleException(isbn);
         }
-
-        // Vérifier si le livre est disponible
-        if (!empruntDAO.isLivreDisponible(isbn)) {
+        if (!livre.isDisponible()) {
             throw new LivreIndisponibleException(isbn);
         }
 
@@ -63,8 +67,9 @@ public class EmpruntService {
 
         empruntDAO.save(emprunt);
 
-        // Marquer le livre comme indisponible
-        empruntDAO.marquerLivreIndisponible(isbn);
+        // Marquer le livre comme indisponible via le modèle
+        livre.emprunter();
+        livreDAO.update(livre);
     }
 
     /**
@@ -87,8 +92,12 @@ public class EmpruntService {
         // Mettre à jour l'emprunt
         empruntDAO.update(emprunt);
 
-        // Marquer le livre comme disponible
-        empruntDAO.marquerLivreDisponible(emprunt.getIdLivre());
+        // Marquer le livre comme disponible via le modèle
+        Livre livre = livreDAO.findByIsbn(emprunt.getIdLivre());
+        if (livre != null) {
+            livre.retourner();
+            livreDAO.update(livre);
+        }
 
         // Enregistrer le retour de l'emprunt
         empruntDAO.retournerLivre(empruntId, dateRetourEffective);

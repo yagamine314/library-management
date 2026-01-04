@@ -16,9 +16,8 @@ public interface Empruntable {
 
     /**
      * Marque l'objet comme emprunté.
-     * @throws LivreIndisponibleException 
      */
-    void emprunter() throws LivreIndisponibleException;
+    void emprunter();
 
     /**
      * Marque l'objet comme retourné.

@@ -28,13 +28,9 @@ public class Livre extends Document implements Empruntable {
     }
 
     @Override
-    public void emprunter() throws LivreIndisponibleException {
-        if (disponible) {
-            this.disponible = false;
-            this.updatedAt = java.time.LocalDateTime.now();
-        } else {
-            throw LivreIndisponibleException.dejaEmprunte(this.isbn);
-        }
+    public void emprunter() {
+        this.disponible = false;
+        this.updatedAt = java.time.LocalDateTime.now();
     }
 
     @Override
