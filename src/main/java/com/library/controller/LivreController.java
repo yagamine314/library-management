@@ -66,7 +66,7 @@ public class LivreController {
     /**
      * Constructeur par défaut.
      */
-    public LivreController() {
+    public LivreController() throws SQLException {
         this.bibliothequeService = new BibliothequeService();
         this.livresList = FXCollections.observableArrayList();
     }
