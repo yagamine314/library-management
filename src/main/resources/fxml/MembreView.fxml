@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane xmlns="http://javafx.com/javafx" 
+            xmlns:fx="http://javafx.com/fxml" 
+            fx:controller="com.example.controller.MembreController">
+    
+    <top>
+        <HBox spacing="10" alignment="CENTER_LEFT" style="-fx-background-color: #2c3e50; -fx-padding: 15;">
+            <Label text="Gestion des Membres" textFill="white" 
+                   style="-fx-font-size: 24px; -fx-font-weight: bold;"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Button text="Actualiser" style="-fx-background-color: #3498db; -fx-text-fill: white;"/>
+        </HBox>
+    </top>
+    
+    <center>
+        <VBox spacing="20" style="-fx-padding: 20;">
+            <!-- Search and Filter Section -->
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <TextField fx:id="searchField" promptText="Rechercher un membre..." 
+                          style="-fx-pref-width: 300px;"/>
+                <ComboBox fx:id="filterComboBox" promptText="Filtrer par statut" 
+                         style="-fx-pref-width: 200px;"/>
+                <Button text="Rechercher" style="-fx-background-color: #27ae60; -fx-text-fill: white;"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Button text="+ Nouveau Membre" 
+                       style="-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-font-weight: bold;"/>
+            </HBox>
+            
+            <!-- Members Table -->
+            <TableView fx:id="membreTable" style="-fx-pref-height: 400px;">
+                <columns>
+                    <TableColumn fx:id="idColumn" text="ID" prefWidth="50"/>
+                    <TableColumn fx:id="nomColumn" text="Nom" prefWidth="150"/>
+                    <TableColumn fx:id="prenomColumn" text="Prénom" prefWidth="150"/>
+                    <TableColumn fx:id="emailColumn" text="Email" prefWidth="200"/>
+                    <TableColumn fx:id="actionsColumn" text="Actions" prefWidth="150">
+                        <cellFactory>
+                            <fx:include source="ActionButtonsCell.fxml"/>
+                        </cellFactory>
+                    </TableColumn>
+                </columns>
+            </TableView>
+            
+            <!-- Pagination -->
+            <HBox alignment="CENTER" spacing="10">
+                <Button text="◀ Précédent"/>
+                <Label text="Page 1 sur 5"/>
+                <Button text="Suivant ▶"/>
+            </HBox>
+        </VBox>
+    </center>
+    
+    <bottom>
+        <HBox spacing="10" alignment="CENTER_RIGHT" style="-fx-padding: 10; -fx-background-color: #ecf0f1;">
+            <Label text="Total membres: " fx:id="totalLabel"/>
+            <Label text="Actifs: " fx:id="actifsLabel" style="-fx-text-fill: #27ae60;"/>
+            <Label text="Inactifs: " fx:id="inactifsLabel" style="-fx-text-fill: #e74c3c;"/>
+        </HBox>
+    </bottom>
+    
+</BorderPane>
