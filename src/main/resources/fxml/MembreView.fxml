@@ -7,7 +7,7 @@
 
 <BorderPane xmlns="http://javafx.com/javafx" 
             xmlns:fx="http://javafx.com/fxml" 
-            fx:controller="com.example.controller.MembreController">
+            fx:controller="com.library.controller.MembreController">
     
     <top>
         <HBox spacing="10" alignment="CENTER_LEFT" style="-fx-background-color: #2c3e50; -fx-padding: 15;">
