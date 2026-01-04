@@ -291,19 +291,8 @@ public class MembreDAOImpl implements MembreDAO {
         return membre;
     }
     
-    private Connection getConnection() {
-        // Votre logique de connexion à la base de données
-        if (connection == null) {
-            try {
-                connection = DriverManager.getConnection(
-                    "jdbc:mysql://localhost:3306/bibliotheque",
-                    "username",
-                    "password"
-                );
-            } catch (SQLException e) {
-                throw new RuntimeException("Erreur de connexion à la base de données", e);
-            }
-        }
-        return connection;
+    private Connection getConnection() throws SQLException {
+    // use the project's DatabaseConnection singleton (no hard-coded credentials)
+    return DatabaseConnection.getInstance().getConnection();
     }
 }
