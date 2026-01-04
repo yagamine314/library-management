@@ -138,6 +138,7 @@ public class LivreController {
 
         try {
             Livre livreModifie = creerLivreDepuisFormulaire();
+            livreModifie.setId(livreSelectionne.getId()); // Conserver l'ID original
             livreModifie.setIsbn(livreSelectionne.getIsbn()); // Conserver l'ISBN original
             bibliothequeService.modifierLivre(livreModifie);
             actualiserTable();
@@ -165,11 +166,11 @@ public class LivreController {
 
         if (confirmation.getResult() == ButtonType.YES) {
             try {
-                bibliothequeService.supprimerLivre(livreSelectionne.getIsbn());
+                bibliothequeService.supprimerLivre(livreSelectionne.getId());
                 actualiserTable();
                 viderFormulaire();
                 afficherMessage("Livre supprimé avec succès", Alert.AlertType.INFORMATION);
-            } catch (ValidationException | SQLException e) {
+            } catch (SQLException e) {
                 afficherMessage("Erreur lors de la suppression: " + e.getMessage(), Alert.AlertType.ERROR);
             }
         }
@@ -309,7 +310,10 @@ public class LivreController {
             throw new ValidationException("L'année doit être un nombre valide");
         }
 
-        return new Livre(isbn, titre, auteur, annee, disponible);
+        // Générer un ID unique pour le nouveau livre
+        String id = java.util.UUID.randomUUID().toString();
+
+        return new Livre(id, isbn, titre, auteur, annee, disponible);
     }
 
     /**

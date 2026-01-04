@@ -1,16 +1,17 @@
 package com.library.dao.impl;
 
+import java.sql.Connection;
+import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
+
 import com.library.dao.EmpruntDAO;
 import com.library.model.Emprunt;
 import com.library.util.DatabaseConnection;
-import com.library.exception.LivreIndisponibleException;
-import com.library.exception.MembreInactifException;
-import com.library.exception.LimiteEmpruntDepasseeException;
-
-import java.math.BigDecimal;
-import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Implémentation de l'interface EmpruntDAO
@@ -18,33 +19,15 @@ import java.util.List;
 public class EmpruntDAOImpl implements EmpruntDAO {
 
     @Override
-    public void save(Emprunt emprunt) throws SQLException,
-            LivreIndisponibleException, MembreInactifException, LimiteEmpruntDepasseeException {
-
+    public void save(Emprunt emprunt) throws SQLException {
         Connection conn = DatabaseConnection.getInstance().getConnection();
         conn.setAutoCommit(false);
 
         try {
-            // Vérifier si le livre est disponible
-            if (!isLivreDisponible(emprunt.getIsbnLivre())) {
-                throw new LivreIndisponibleException(emprunt.getIsbnLivre());
-            }
-
-            // Vérifier si le membre est actif
-            if (!isMembreActif(emprunt.getIdMembre())) {
-                throw new MembreInactifException(emprunt.getIdMembre());
-            }
-
-            // Vérifier la limite d'emprunts
-            int empruntsEnCours = countEmpruntsEnCoursByMembre(emprunt.getIdMembre());
-            if (empruntsEnCours >= 3) {
-                throw new LimiteEmpruntDepasseeException(emprunt.getIdMembre(), empruntsEnCours);
-            }
-
             // Insérer l'emprunt
-            String sql = "INSERT INTO emprunts (isbn_livre, id_membre, date_emprunt, date_retour_prevue, penalite) VALUES (?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO emprunts (id_livre, id_membre, date_emprunt, date_retour_prevue, penalite) VALUES (?, ?, ?, ?, ?)";
             try (PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-                stmt.setString(1, emprunt.getIsbnLivre());
+                stmt.setString(1, emprunt.getIdLivre());
                 stmt.setInt(2, emprunt.getIdMembre());
                 stmt.setDate(3, emprunt.getDateEmprunt());
                 stmt.setDate(4, emprunt.getDateRetourPrevue());
@@ -60,12 +43,9 @@ public class EmpruntDAOImpl implements EmpruntDAO {
                 }
             }
 
-            // Marquer le livre comme indisponible
-            marquerLivreIndisponible(emprunt.getIsbnLivre());
-
             conn.commit();
 
-        } catch (SQLException | LivreIndisponibleException | MembreInactifException | LimiteEmpruntDepasseeException e) {
+        } catch (SQLException e) {
             conn.rollback();
             throw e;
         } finally {
@@ -124,14 +104,14 @@ public class EmpruntDAOImpl implements EmpruntDAO {
     }
 
     @Override
-    public List<Emprunt> findByLivreIsbn(String isbn) throws SQLException {
+    public List<Emprunt> findByLivreId(String id) throws SQLException {
         List<Emprunt> emprunts = new ArrayList<>();
-        String sql = "SELECT * FROM emprunts WHERE isbn_livre = ? ORDER BY date_emprunt DESC";
+        String sql = "SELECT * FROM emprunts WHERE id_livre = ? ORDER BY date_emprunt DESC";
 
         try (Connection conn = DatabaseConnection.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            stmt.setString(1, isbn);
+            stmt.setString(1, id);
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
                     emprunts.add(mapResultSetToEmprunt(rs));
@@ -159,13 +139,13 @@ public class EmpruntDAOImpl implements EmpruntDAO {
 
     @Override
     public void update(Emprunt emprunt) throws SQLException {
-        String sql = "UPDATE emprunts SET isbn_livre = ?, id_membre = ?, date_emprunt = ?, " +
+        String sql = "UPDATE emprunts SET id_livre = ?, id_membre = ?, date_emprunt = ?, " +
                      "date_retour_prevue = ?, date_retour_effective = ?, penalite = ? WHERE id = ?";
 
         try (Connection conn = DatabaseConnection.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            stmt.setString(1, emprunt.getIsbnLivre());
+            stmt.setString(1, emprunt.getIdLivre());
             stmt.setInt(2, emprunt.getIdMembre());
             stmt.setDate(3, emprunt.getDateEmprunt());
             stmt.setDate(4, emprunt.getDateRetourPrevue());
@@ -208,9 +188,6 @@ public class EmpruntDAOImpl implements EmpruntDAO {
                 stmt.executeUpdate();
             }
 
-            // Marquer le livre comme disponible
-            marquerLivreDisponible(emprunt.getIsbnLivre());
-
             conn.commit();
 
         } catch (SQLException e) {
@@ -238,9 +215,40 @@ public class EmpruntDAOImpl implements EmpruntDAO {
         return 0;
     }
 
-    // Méthodes utilitaires privées
+    @Override
+    public boolean livreExiste(String isbn) throws SQLException {
+        String sql = "SELECT COUNT(*) FROM livres WHERE isbn = ?";
+        try (Connection conn = DatabaseConnection.getInstance().getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-    private boolean isLivreDisponible(String isbn) throws SQLException {
+            stmt.setString(1, isbn);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1) > 0;
+                }
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public boolean membreExiste(int membreId) throws SQLException {
+        String sql = "SELECT COUNT(*) FROM membres WHERE id = ?";
+        try (Connection conn = DatabaseConnection.getInstance().getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, membreId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1) > 0;
+                }
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public boolean isLivreDisponible(String isbn) throws SQLException {
         String sql = "SELECT disponible FROM livres WHERE isbn = ?";
         try (Connection conn = DatabaseConnection.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -255,7 +263,30 @@ public class EmpruntDAOImpl implements EmpruntDAO {
         return false;
     }
 
-    private boolean isMembreActif(int membreId) throws SQLException {
+    @Override
+    public void marquerLivreIndisponible(String isbn) throws SQLException {
+        String sql = "UPDATE livres SET disponible = FALSE WHERE isbn = ?";
+        try (Connection conn = DatabaseConnection.getInstance().getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, isbn);
+            stmt.executeUpdate();
+        }
+    }
+
+    @Override
+    public void marquerLivreDisponible(String isbn) throws SQLException {
+        String sql = "UPDATE livres SET disponible = TRUE WHERE isbn = ?";
+        try (Connection conn = DatabaseConnection.getInstance().getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, isbn);
+            stmt.executeUpdate();
+        }
+    }
+
+    @Override
+    public boolean isMembreActif(int membreId) throws SQLException {
         String sql = "SELECT actif FROM membres WHERE id = ?";
         try (Connection conn = DatabaseConnection.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -270,30 +301,10 @@ public class EmpruntDAOImpl implements EmpruntDAO {
         return false;
     }
 
-    private void marquerLivreIndisponible(String isbn) throws SQLException {
-        String sql = "UPDATE livres SET disponible = FALSE WHERE isbn = ?";
-        try (Connection conn = DatabaseConnection.getInstance().getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-
-            stmt.setString(1, isbn);
-            stmt.executeUpdate();
-        }
-    }
-
-    private void marquerLivreDisponible(String isbn) throws SQLException {
-        String sql = "UPDATE livres SET disponible = TRUE WHERE isbn = ?";
-        try (Connection conn = DatabaseConnection.getInstance().getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-
-            stmt.setString(1, isbn);
-            stmt.executeUpdate();
-        }
-    }
-
     private Emprunt mapResultSetToEmprunt(ResultSet rs) throws SQLException {
         Emprunt emprunt = new Emprunt();
         emprunt.setId(rs.getInt("id"));
-        emprunt.setIsbnLivre(rs.getString("isbn_livre"));
+        emprunt.setIdLivre(rs.getString("id_livre"));
         emprunt.setIdMembre(rs.getInt("id_membre"));
         emprunt.setDateEmprunt(rs.getDate("date_emprunt"));
         emprunt.setDateRetourPrevue(rs.getDate("date_retour_prevue"));

@@ -8,7 +8,7 @@ import java.sql.Date;
  */
 public class Emprunt {
     private int id;
-    private String isbnLivre;
+    private String idLivre;
     private int idMembre;
     private Date dateEmprunt;
     private Date dateRetourPrevue;
@@ -18,8 +18,8 @@ public class Emprunt {
     // Constructeurs
     public Emprunt() {}
 
-    public Emprunt(String isbnLivre, int idMembre, Date dateEmprunt, Date dateRetourPrevue) {
-        this.isbnLivre = isbnLivre;
+    public Emprunt(String idLivre, int idMembre, Date dateEmprunt, Date dateRetourPrevue) {
+        this.idLivre = idLivre;
         this.idMembre = idMembre;
         this.dateEmprunt = dateEmprunt;
         this.dateRetourPrevue = dateRetourPrevue;
@@ -35,12 +35,12 @@ public class Emprunt {
         this.id = id;
     }
 
-    public String getIsbnLivre() {
-        return isbnLivre;
+    public String getIdLivre() {
+        return idLivre;
     }
 
-    public void setIsbnLivre(String isbnLivre) {
-        this.isbnLivre = isbnLivre;
+    public void setIdLivre(String idLivre) {
+        this.idLivre = idLivre;
     }
 
     public int getIdMembre() {
@@ -87,7 +87,7 @@ public class Emprunt {
     public String toString() {
         return "Emprunt{" +
                 "id=" + id +
-                ", isbnLivre='" + isbnLivre + '\'' +
+                ", idLivre='" + idLivre + '\'' +
                 ", idMembre=" + idMembre +
                 ", dateEmprunt=" + dateEmprunt +
                 ", dateRetourPrevue=" + dateRetourPrevue +

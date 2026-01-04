@@ -15,21 +15,22 @@ public class LivreDAOImpl implements LivreDAO {
 
     @Override
     public void save(Livre livre) throws SQLException {
-        String sql = "INSERT INTO livres (isbn, titre, auteur, annee_publication, disponible) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO livres (id, isbn, titre, auteur, annee_publication, disponible) VALUES (?, ?, ?, ?, ?, ?)";
         try (Connection conn = DatabaseConnection.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setString(1, livre.getIsbn());
-            stmt.setString(2, livre.getTitre());
-            stmt.setString(3, livre.getAuteur());
-            stmt.setInt(4, livre.getAnneePublication());
-            stmt.setBoolean(5, livre.isDisponible());
+            stmt.setString(1, livre.getId());
+            stmt.setString(2, livre.getIsbn());
+            stmt.setString(3, livre.getTitre());
+            stmt.setString(4, livre.getAuteur());
+            stmt.setInt(5, livre.getAnneePublication());
+            stmt.setBoolean(6, livre.isDisponible());
             stmt.executeUpdate();
         }
     }
 
     @Override
     public Livre findById(Object id) throws SQLException {
-        String sql = "SELECT * FROM livres WHERE isbn = ?";
+        String sql = "SELECT * FROM livres WHERE id = ?";
         try (Connection conn = DatabaseConnection.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, (String) id);
@@ -58,21 +59,21 @@ public class LivreDAOImpl implements LivreDAO {
 
     @Override
     public void update(Livre livre) throws SQLException {
-        String sql = "UPDATE livres SET titre = ?, auteur = ?, annee_publication = ?, disponible = ? WHERE isbn = ?";
+        String sql = "UPDATE livres SET titre = ?, auteur = ?, annee_publication = ?, disponible = ? WHERE id = ?";
         try (Connection conn = DatabaseConnection.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, livre.getTitre());
             stmt.setString(2, livre.getAuteur());
             stmt.setInt(3, livre.getAnneePublication());
             stmt.setBoolean(4, livre.isDisponible());
-            stmt.setString(5, livre.getIsbn());
+            stmt.setString(5, livre.getId());
             stmt.executeUpdate();
         }
     }
 
     @Override
     public void delete(Object id) throws SQLException {
-        String sql = "DELETE FROM livres WHERE isbn = ?";
+        String sql = "DELETE FROM livres WHERE id = ?";
         try (Connection conn = DatabaseConnection.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, (String) id);
@@ -142,19 +143,24 @@ public class LivreDAOImpl implements LivreDAO {
 
     @Override
     public Livre findByIsbn(String isbn) throws SQLException {
-        return findById(isbn);
+        String sql = "SELECT * FROM livres WHERE isbn = ?";
+        try (Connection conn = DatabaseConnection.getInstance().getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, isbn);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return mapResultSetToLivre(rs);
+                }
+            }
+        }
+        return null;
     }
 
     /**
      * Méthode utilitaire pour mapper un ResultSet à un objet Livre.
      */
     private Livre mapResultSetToLivre(ResultSet rs) throws SQLException {
-        Livre livre = new Livre();
-        livre.setIsbn(rs.getString("isbn"));
-        livre.setTitre(rs.getString("titre"));
-        livre.setAuteur(rs.getString("auteur"));
-        livre.setAnneePublication(rs.getInt("annee_publication"));
-        livre.setDisponible(rs.getBoolean("disponible"));
+        Livre livre = new Livre(rs.getString("id"), rs.getString("isbn"), rs.getString("titre"), rs.getString("auteur"), rs.getInt("annee_publication"), rs.getBoolean("disponible"));
         livre.setCreatedAt(rs.getTimestamp("created_at").toLocalDateTime());
         livre.setUpdatedAt(rs.getTimestamp("updated_at").toLocalDateTime());
         return livre;

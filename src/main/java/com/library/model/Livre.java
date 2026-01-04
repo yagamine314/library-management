@@ -18,8 +18,8 @@ public class Livre extends Document implements Empruntable {
     /**
      * Constructeur avec paramètres.
      */
-    public Livre(String isbn, String titre, String auteur, int anneePublication, boolean disponible) {
-        super(isbn, titre, auteur, anneePublication, disponible);
+    public Livre(String id, String isbn, String titre, String auteur, int anneePublication, boolean disponible) {
+        super(id, isbn, titre, auteur, anneePublication, disponible);
     }
 
     @Override
@@ -46,6 +46,7 @@ public class Livre extends Document implements Empruntable {
     @Override
     public String toString() {
         return "Livre{" +
+                "id='" + id + '\'' +
                 "isbn='" + isbn + '\'' +
                 ", titre='" + titre + '\'' +
                 ", auteur='" + auteur + '\'' +

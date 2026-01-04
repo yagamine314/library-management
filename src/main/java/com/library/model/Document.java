@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
  */
 public abstract class Document {
 
+    protected String id;
     protected String isbn;
     protected String titre;
     protected String auteur;
@@ -26,7 +27,8 @@ public abstract class Document {
     /**
      * Constructeur avec paramètres.
      */
-    public Document(String isbn, String titre, String auteur, int anneePublication, boolean disponible) {
+    public Document(String id, String isbn, String titre, String auteur, int anneePublication, boolean disponible) {
+        this.id = id;
         this.isbn = isbn;
         this.titre = titre;
         this.auteur = auteur;
@@ -37,6 +39,16 @@ public abstract class Document {
     }
 
     // Getters et setters
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+        this.updatedAt = LocalDateTime.now();
+    }
+
     public String getIsbn() {
         return isbn;
     }
@@ -101,7 +113,8 @@ public abstract class Document {
     @Override
     public String toString() {
         return "Document{" +
-                "isbn='" + isbn + '\'' +
+                "id='" + id + '\'' +
+                ", isbn='" + isbn + '\'' +
                 ", titre='" + titre + '\'' +
                 ", auteur='" + auteur + '\'' +
                 ", anneePublication=" + anneePublication +
