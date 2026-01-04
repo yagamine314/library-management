@@ -174,8 +174,6 @@ public class EmpruntService {
         return empruntDAO.countEmpruntsEnCoursByMembre(membreId);
     }
 
-
-
     /**
      * Génère des statistiques sur les emprunts
      */
@@ -203,7 +201,7 @@ public class EmpruntService {
                              Statistiques des emprunts:
                              - Total emprunts: %d
                              - Emprunts en cours: %d
-                             - Emprunts termin\u00e9s: %d
+                             - Emprunts terminés: %d
                              - Taux de retour à temps: %.2f%%
                              """,
             totalEmprunts, empruntsEnCoursCount, empruntsTermines, tauxRetourATemps

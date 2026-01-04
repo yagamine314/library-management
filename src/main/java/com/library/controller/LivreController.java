@@ -66,8 +66,13 @@ public class LivreController {
     /**
      * Constructeur par défaut.
      */
-    public LivreController() throws SQLException {
-        this.bibliothequeService = new BibliothequeService();
+    public LivreController() {
+        try {
+            this.bibliothequeService = new BibliothequeService();
+        } catch (SQLException e) {
+            // Gérer l'exception (par exemple, afficher un message d'erreur ou utiliser une valeur par défaut)
+            throw new RuntimeException("Erreur lors de l'initialisation du service", e);
+        }
         this.livresList = FXCollections.observableArrayList();
     }
 

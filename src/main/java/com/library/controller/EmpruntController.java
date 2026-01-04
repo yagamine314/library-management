@@ -63,7 +63,7 @@ public class EmpruntController {
     @FXML
     private Label statusLabel;
 
-    private final EmpruntService empruntService;
+    private EmpruntService empruntService;
     private final ObservableList<Emprunt> empruntsList;
 
     /**
