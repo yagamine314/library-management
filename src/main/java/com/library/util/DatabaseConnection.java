@@ -48,8 +48,22 @@ public class DatabaseConnection {
     }
     
     public Connection getConnection() throws SQLException {
-        if (connection == null || connection.isClosed()) {
-            throw new SQLException("Connexion fermée!");
+        if (connection == null || connection.isClosed() || !connection.isValid(2)) {
+            // Reconnexion automatique si la connexion est invalide
+            synchronized (DatabaseConnection.class) {
+                if (connection == null || connection.isClosed() || !connection.isValid(2)) {
+                    try {
+                        if (connection != null && !connection.isClosed()) {
+                            connection.close();
+                        }
+                        Class.forName("com.mysql.cj.jdbc.Driver");
+                        this.connection = DriverManager.getConnection(URL + OPTIONS, USER, PASSWORD);
+                        System.out.println("Reconnexion à la base de données réussie");
+                    } catch (ClassNotFoundException e) {
+                        throw new RuntimeException("Driver MySQL introuvable", e);
+                    }
+                }
+            }
         }
         return connection;
     }
