@@ -27,7 +27,7 @@
                  style="-fx-background-color: white;">
             
             <!-- Onglet Livres -->
-            <Tab text="📖 Livres">
+            <Tab >
                 <graphic>
                     <Label text="📖 Livres" style="-fx-font-size: 14px; -fx-font-weight: bold;"/>
                 </graphic>
@@ -37,7 +37,7 @@
             </Tab>
             
             <!-- Onglet Membres -->
-            <Tab text="👥 Membres">
+            <Tab >
                 <graphic>
                     <Label text="👥 Membres" style="-fx-font-size: 14px; -fx-font-weight: bold;"/>
                 </graphic>
@@ -47,7 +47,7 @@
             </Tab>
             
             <!-- Onglet Emprunts -->
-            <Tab text="🔄 Emprunts">
+            <Tab>
                 <graphic>
                     <Label text="🔄 Emprunts" style="-fx-font-size: 14px; -fx-font-weight: bold;"/>
                 </graphic>
